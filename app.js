@@ -227,9 +227,11 @@
   function drawDecorations(ctx){
     if(state.pine){
       const a=state.items['ramo-esq'],b=state.items['ramo-dir'];
-      decoratedBranch(ctx,a.x,a.y,1,a.scale);decoratedBranch(ctx,b.x,b.y,-1,b.scale);
+      if(!state.hidden?.includes('ramo-esq'))decoratedBranch(ctx,a.x,a.y,1,a.scale);
+      if(!state.hidden?.includes('ramo-dir'))decoratedBranch(ctx,b.x,b.y,-1,b.scale);
       const d=state.items['flor-esq'],e=state.items['flor-dir'];
-      flowerCorner(ctx,d.x,d.y,1,d.scale);flowerCorner(ctx,e.x,e.y,-1,e.scale);
+      if(!state.hidden?.includes('flor-esq'))flowerCorner(ctx,d.x,d.y,1,d.scale);
+      if(!state.hidden?.includes('flor-dir'))flowerCorner(ctx,e.x,e.y,-1,e.scale);
     }
     const y=state.layout==='cima'?555:845;
     ctx.strokeStyle=rgba(state.colors.gold,.6);ctx.lineWidth=2;
@@ -256,9 +258,9 @@
     if(state.layout==='cima'){
       const shade=ctx.createLinearGradient(0,560,0,940);shade.addColorStop(0,rgba(state.colors.gold,.045));shade.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=shade;ctx.fillRect(0,555,1000,440);
     }
-    drawCalendar(ctx,state.items.calendario);
+    if(!state.hidden?.includes('calendario'))drawCalendar(ctx,state.items.calendario);
     drawDecorations(ctx);
-    drawPlaque(ctx,state.items.ano);
+    if(!state.hidden?.includes('ano'))drawPlaque(ctx,state.items.ano);
     drawSignature(ctx);drawCustomImages(ctx);
     if(!exporting)drawSelection(ctx);
     ctx.restore();
@@ -276,12 +278,12 @@
     return{x:i.x-w*i.scale/2,y:i.y-h*i.scale/2,w:w*i.scale,h:h*i.scale};
   }
   function drawSelection(ctx){
-    if(!state.selected)return;
+    if(!state.selected || state.hidden?.includes(state.selected))return;
     const b=boundsFor(state.selected);if(!b)return;
     ctx.save();ctx.setLineDash([10,7]);ctx.lineWidth=2;ctx.strokeStyle='#3a8ca0';
     ctx.strokeRect(b.x+3,b.y+3,b.w-6,b.h-6);ctx.setLineDash([]);
     for(const [x,y] of [[b.x,b.y],[b.x+b.w,b.y],[b.x,b.y+b.h],[b.x+b.w,b.y+b.h]]){
-      ctx.beginPath();ctx.arc(x,y,5,0,2*Math.PI);ctx.fillStyle='#fff';ctx.fill();ctx.stroke();
+      ctx.beginPath();ctx.arc(x,y,9,0,2*Math.PI);ctx.fillStyle='#fff';ctx.fill();ctx.stroke();
     }
     ctx.restore();
   }
@@ -305,7 +307,7 @@
     for(const [id,label] of entries){
       const opt=document.createElement('option');opt.value=id;opt.textContent=label;select.append(opt);
     }
-    if(!prior||!entries.some(x=>x[0]===prior))state.selected='foto';
+    if(prior && !entries.some(x=>x[0]===prior))state.selected=null;
     select.value=state.selected;
     syncElementControls();
   }
@@ -432,6 +434,7 @@
     }
     const ids=['ano','ramo-esq','ramo-dir','flor-esq','flor-dir','calendario'];
     for(const id of ids){
+      if(state.hidden?.includes(id))continue;
       if(id.startsWith('ramo')&&!state.pine)continue;
       if(id.startsWith('flor')&&!state.pine)continue;
       const b=boundsFor(id);
@@ -586,7 +589,8 @@
         status.textContent=`Separando as peças de ${file.name} (${index+1}/${files.length})…`;
         // Yield once so the progress label is actually painted before heavy canvas work.
         await new Promise(done=>requestAnimationFrame(()=>setTimeout(done,0)));
-        const result=await window.SpriteSheetTools.extract(file,{mode,tolerance,minimum,color});
+        const result=await window.GraceSpritePreview.preview(file,{mode,tolerance,minimum,color});
+        if(!result){status.textContent='Importação cancelada. Nenhum adorno foi adicionado.';continue;}
         skipped+=Math.max(0,result.total-result.items.length);
         if(!result.items.length){status.textContent=`Nenhuma peça encontrada em ${file.name}. Tente outra tolerância ou modo de fundo.`;continue;}
         for(const [j,part] of result.items.entries()){
@@ -800,5 +804,9 @@
   demoPhoto.onload=()=>{syncAllControls();setStatus('Pronto para editar');};
   demoPhoto.onerror=()=>{setStatus('Abra a pasta completa com a foto de demonstração');syncAllControls();};
   demoPhoto.src='assets/foto-demonstracao.jpg';
+  window.GraceEditor={state,canvas,customImages,showToast,redraw,pointOf,hitTest,boundsFor,
+    syncElementControls,syncElementChoices,syncPhotoControls,syncAllControls,getPhotoMetrics,
+    imgFromData,demoPhoto,setCurrentPhoto:image=>{currentPhoto=image;},
+    saveProject:()=>$('save-project').click()};
   syncAllControls();
 })();

@@ -9,6 +9,8 @@
   <script defer src="sprites.js"></script>
   <script defer src="export.js"></script>
   <script defer src="app.js"></script>
+  <script defer src="sprite-preview.js"></script>
+  <script defer src="editor-workspace.js"></script>
 </head>
 <body>
   <div class="app-shell">
@@ -106,7 +108,7 @@
             <label class="upload-zone ornament-zone" for="ornament-file"><strong>Escolher imagem individual</strong><span>Para arquivos que já são um único adorno</span></label>
             <input id="ornament-file" type="file" accept="image/png,image/jpeg,image/webp" hidden>
           </details>
-          <div class="element-properties">
+          <details class="element-properties element-options-legacy"><summary>Controles avançados de posição</summary>
             <h3>Ajustar objeto inserido</h3>
             <div class="control"><label for="element-select">Elemento selecionado</label><select id="element-select"></select></div>
             <button id="remove-element" class="btn tertiary" type="button" hidden>Excluir imagem adicionada</button>
@@ -114,7 +116,7 @@
             <div class="control"><div class="control-label"><label for="element-x">Posição horizontal</label><output id="element-x-value">500</output></div><input id="element-x" type="range" min="-100" max="1100" step="1"></div>
             <div class="control"><div class="control-label"><label for="element-y">Posição vertical</label><output id="element-y-value">600</output></div><input id="element-y" type="range" min="-100" max="1514" step="1"></div>
             <div class="button-stack"><button id="element-reset" class="btn secondary" type="button">Restaurar posição</button><button id="all-reset" class="btn tertiary" type="button">Restaurar todo o layout</button></div>
-          </div>
+          </details>
         </section>
 
         <section id="panel-exportar" class="panel">
@@ -134,9 +136,31 @@
     </aside>
 
     <main class="workspace">
+      <div id="editor-toolbar" class="editor-toolbar">
+        <button type="button" id="edit-undo" title="Desfazer (Ctrl+Z)">↶ Desfazer</button>
+        <button type="button" id="edit-redo" title="Refazer (Ctrl+Y)">↷ Refazer</button>
+        <span class="toolbar-divider"></span>
+        <button type="button" id="save-draft">Salvar rascunho</button>
+        <button type="button" id="save-editable" class="toolbar-primary">↓ Salvar projeto</button>
+        <button type="button" id="open-editable">Abrir projeto</button>
+        <span id="editor-save-status" class="editor-save-status">Seu trabalho será salvo automaticamente</span>
+      </div>
       <div class="workspace-top"><div><div class="eyebrow">PRÉ-VISUALIZAÇÃO EM TEMPO REAL</div><h2>Seu calendário personalizado</h2><p>Tudo que você vê no pôster será exportado.</p></div><div class="workspace-top-actions"><button id="open-photo" type="button" class="toolbar-btn">+ Foto</button><button id="go-export" type="button" class="toolbar-btn strong">Exportar ↗</button></div></div>
       <div class="work-meta"><span id="status" role="status">Pronto para editar</span><span><span class="dot"></span> 12 meses • português do Brasil</span></div>
-      <div class="canvas-stage" id="canvas-stage"><div class="poster-container" id="poster-container"><canvas id="poster" width="1000" height="1414" aria-label="Prévia editável do calendário anual. Arraste a fotografia e os elementos."></canvas><div class="canvas-drop-hint" id="canvas-drop-hint" aria-hidden="true">Solte aqui para posicionar o adorno</div></div></div>
+      <div class="editing-layout"><div class="canvas-stage" id="canvas-stage"><div class="poster-container" id="poster-container"><canvas id="poster" width="1000" height="1414" aria-label="Prévia editável do calendário anual. Arraste a fotografia e os elementos."></canvas><div class="canvas-drop-hint" id="canvas-drop-hint" aria-hidden="true">Solte aqui para posicionar o adorno</div></div></div>
+        <aside class="selection-inspector" id="selection-inspector" aria-label="Ferramentas de edição do elemento selecionado">
+          <div class="inspector-header"><span class="eyebrow">EDITAR SELEÇÃO</span><h3 id="inspector-name">Propriedades</h3></div>
+          <div id="inspector-empty" class="inspector-empty">Clique em uma imagem ou adorno no calendário para editar aqui.</div>
+          <div id="inspector-fields" hidden>
+            <div class="inspector-row"><label for="inspector-scale">Tamanho</label><output id="inspector-scale-value">100%</output></div>
+            <input type="range" min="15" max="400" id="inspector-scale" value="100">
+            <div class="inspector-coordinates"><label>X <input id="inspector-x" type="number" step="1"></label><label>Y <input id="inspector-y" type="number" step="1"></label></div>
+            <div class="inspector-help">Arraste pela imagem para mover. Puxe os círculos nos cantos para redimensionar.</div>
+            <div class="inspector-actions"><button type="button" id="inspector-copy">Copiar</button><button type="button" id="inspector-cut">Recortar</button><button type="button" id="inspector-paste">Colar</button><button type="button" id="inspector-crop">Cortar imagem</button><button type="button" id="inspector-delete" class="danger">Excluir objeto</button></div>
+          </div>
+          <button type="button" id="inspector-restore" hidden>Restaurar adornos do modelo</button>
+          <p class="inspector-shortcuts">Ctrl+C/Ctrl+V para duplicar • Delete para excluir • Ctrl+Z para desfazer.</p>
+        </aside></div>
       <div class="workspace-bottom"><span>↔ Arraste a foto ou selecione outros elementos para movê-los.</span><span id="preview-info">A4 • 2027</span></div>
     </main>
   </div>

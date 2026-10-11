@@ -23,3 +23,13 @@ Fotografias de clientes não são enviadas para servidores: o processamento ocor
 - `.github/workflows/release.yml`: geração automática do ZIP no GitHub Releases
 
 Ao atualizar a branch `main`, o GitHub Actions publica uma nova versão em Releases.
+
+## Novidades do editor visual
+
+- Selecione um elemento no calendário para abrir o painel de edição à direita.
+- Arraste as alças para redimensionar e use Delete/Ctrl+C/Ctrl+X/Ctrl+V.
+- Desfaça ou refaça até 40 alterações (Ctrl+Z, Ctrl+Y).
+- Rascunho salvo automaticamente no navegador; **Salvar projeto** baixa o arquivo JSON completo para guardar ou continuar em outro dispositivo.
+- Ao importar sprite sheets, confira as miniaturas na janela de prévia, ajuste o fundo e clique em **Separar elementos** antes de salvar na biblioteca.
+
+O armazenamento local do navegador pode ser apagado nas configurações. Para cópia permanente, guarde o JSON baixado.
