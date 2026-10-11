@@ -1,0 +1,30 @@
+name: Gerar ZIP e Release
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Montar pacote
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist/Editor_Calendario_Grace
+          cp index.html app.js export.js sprites.js styles.css README.md dist/Editor_Calendario_Grace/
+          cp -R assets dist/Editor_Calendario_Grace/
+          cd dist
+          zip -q -r "Grace_Calendario_v1.0.${GITHUB_RUN_NUMBER}.zip" Editor_Calendario_Grace
+      - name: Criar release com download ZIP
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          versao="v1.0.${GITHUB_RUN_NUMBER}"
+          gh release create "$versao" "dist/Grace_Calendario_$versao.zip" --target "$GITHUB_SHA" --title "Grace Calendarios $versao" --notes "Editor offline com recorte automatico de adornos, 12 meses em portugues e exportacao PNG/PDF." --latest

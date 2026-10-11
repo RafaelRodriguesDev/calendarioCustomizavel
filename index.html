@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <title>Ateliê de Calendários | Grace Fotografia</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="sprites.js"></script>
+  <script defer src="export.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <header class="brand">
+        <div class="brand-mark" aria-hidden="true">✳</div>
+        <div><div class="eyebrow">GRACE FOTOGRAFIA</div><h1>Ateliê de Calendários</h1><p>Crie, personalize e imprima.</p></div>
+      </header>
+
+      <nav class="tabbar" aria-label="Seções do editor">
+        <button class="tab active" data-tab="modelos" type="button">✦ <span>Modelos</span></button>
+        <button class="tab" data-tab="fotografia" type="button">▧ <span>Foto</span></button>
+        <button class="tab" data-tab="calendario" type="button">▦ <span>Calendário</span></button>
+        <button class="tab" data-tab="aparencia" type="button">◈ <span>Aparência</span></button>
+        <button class="tab" data-tab="elementos" type="button">✥ <span>Elementos</span></button>
+        <button class="tab" data-tab="exportar" type="button">↗ <span>Exportar</span></button>
+      </nav>
+
+      <div class="sidebar-panels">
+        <section id="panel-modelos" class="panel active">
+          <div class="panel-heading"><h2>Seu ponto de partida</h2><p>O calendário completo cabe em uma página e acompanha a foto.</p></div>
+          <div class="segmented two" role="group" aria-label="Posição da fotografia">
+            <button id="photo-top" class="selected" type="button">Foto em cima</button>
+            <button id="photo-bottom" type="button">Foto embaixo</button>
+          </div>
+          <h3>Temas prontos</h3>
+          <div class="theme-grid">
+            <button class="theme-card selected" data-theme="classico" type="button"><span class="swatches"><i style="background:#80252c"></i><i style="background:#214e3d"></i><i style="background:#c3a06b"></i></span><strong>Natal clássico</strong><small>Vermelho, verde e dourado</small></button>
+            <button class="theme-card" data-theme="champagne" type="button"><span class="swatches"><i style="background:#79553e"></i><i style="background:#b99160"></i><i style="background:#f4e5cd"></i></span><strong>Champagne</strong><small>Delicado e elegante</small></button>
+            <button class="theme-card" data-theme="rose" type="button"><span class="swatches"><i style="background:#aa5962"></i><i style="background:#697d69"></i><i style="background:#efc7b2"></i></span><strong>Rosé natalino</strong><small>Romântico e suave</small></button>
+            <button class="theme-card" data-theme="inverno" type="button"><span class="swatches"><i style="background:#4c6970"></i><i style="background:#6b827c"></i><i style="background:#b2b9bf"></i></span><strong>Inverno</strong><small>Azul e prata</small></button>
+          </div>
+          <div class="tip"><strong>Dica:</strong> escolha o modelo, substitua a foto e ajuste as cores para combinar com o ensaio.</div>
+        </section>
+
+        <section id="panel-fotografia" class="panel">
+          <div class="panel-heading"><h2>Fotografia</h2><p>Arraste a foto diretamente na prévia para ajustar o enquadramento.</p></div>
+          <label class="upload-zone" for="photo-file"><span class="upload-icon">＋</span><strong>Escolher foto do cliente</strong><span>JPG, PNG ou WebP • de preferência alta resolução</span></label>
+          <input id="photo-file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+          <div id="photo-meta" class="file-note">Foto de demonstração carregada.</div>
+          <div class="control"><div class="control-label"><label for="photo-zoom">Zoom da foto</label><output id="photo-zoom-value">100%</output></div><input type="range" id="photo-zoom" min="100" max="260" step="1" value="100"></div>
+          <div class="control"><div class="control-label"><label for="photo-x">Deslocamento horizontal</label><output id="photo-x-value">0</output></div><input type="range" id="photo-x" min="-500" max="500" step="1" value="0"></div>
+          <div class="control"><div class="control-label"><label for="photo-y">Deslocamento vertical</label><output id="photo-y-value">0</output></div><input type="range" id="photo-y" min="-500" max="500" step="1" value="0"></div>
+          <div class="button-stack"><button id="photo-center" class="btn secondary" type="button">Centralizar fotografia</button><button id="extract-colors" class="btn secondary" type="button">✦ Combinar paleta com a foto</button></div>
+          <div class="tip">A fotografia ocupa uma área própria, sem números sobre os rostos. O calendário mantém um fundo coordenado e totalmente editável.</div>
+        </section>
+
+        <section id="panel-calendario" class="panel">
+          <div class="panel-heading"><h2>Calendário anual</h2><p>Os 12 meses são gerados automaticamente com datas corretas, incluindo anos bissextos.</p></div>
+          <div class="control"><label for="year">Ano</label><input id="year" type="number" min="1900" max="2100" step="1" value="2027"></div>
+          <div class="control"><label for="week-start">Primeiro dia da semana</label><select id="week-start"><option value="0">Domingo</option><option value="1">Segunda-feira</option></select></div>
+          <div class="control"><label for="grid-cols">Organização dos meses</label><select id="grid-cols"><option value="4">4 colunas × 3 linhas (igual à referência)</option><option value="3">3 colunas × 4 linhas</option></select></div>
+          <div class="control"><div class="control-label"><label for="calendar-size">Tamanho do calendário</label><output id="calendar-size-value">100%</output></div><input id="calendar-size" type="range" min="82" max="110" value="100" step="1"></div>
+          <label class="checkbox-row"><input id="highlight-sunday" type="checkbox" checked><span>Destacar os domingos na cor principal</span></label>
+          <div id="leap-badge" class="tip">2027 possui 365 dias.</div>
+          <div class="tip">Os dias são calculados pelo JavaScript, não desenhados na imagem. Assim o calendário funciona para qualquer ano selecionado.</div>
+        </section>
+
+        <section id="panel-aparencia" class="panel">
+          <div class="panel-heading"><h2>Cores e acabamento</h2><p>Altere a identidade visual sem precisar de programas de design.</p></div>
+          <div class="color-setting"><label for="color-red">Cor principal e títulos</label><input id="color-red" type="color" value="#80252c"></div>
+          <div class="color-setting"><label for="color-green">Folhagens</label><input id="color-green" type="color" value="#214e3d"></div>
+          <div class="color-setting"><label for="color-gold">Contornos e detalhes</label><input id="color-gold" type="color" value="#c3a06b"></div>
+          <div class="color-setting"><label for="color-paper">Fundo do calendário</label><input id="color-paper" type="color" value="#f9f0e1"></div>
+          <div class="color-setting"><label for="color-ink">Números e texto</label><input id="color-ink" type="color" value="#413931"></div>
+          <label class="checkbox-row"><input id="show-pine" type="checkbox" checked><span>Mostrar ramos e folhagens natalinas</span></label>
+          <label class="checkbox-row"><input id="show-ornaments" type="checkbox" checked><span>Mostrar laços, estrelas e enfeites</span></label>
+          <label class="checkbox-row"><input id="show-month-lines" type="checkbox" checked><span>Mostrar divisórias dos meses</span></label>
+          <label class="checkbox-row"><input id="show-year-plaque" type="checkbox" checked><span>Mostrar moldura decorada do ano</span></label>
+          <div class="control"><label for="name-text">Texto adicional (opcional)</label><input id="name-text" type="text" maxlength="52" placeholder="Ex.: Família Oliveira"></div>
+          <div class="control"><label for="signature">Assinatura opcional</label><input id="signature" type="text" maxlength="55" placeholder="Ex.: Grace Fotografia"></div>
+        </section>
+
+        <section id="panel-elementos" class="panel elements-panel">
+          <div class="panel-heading"><h2>Biblioteca de elementos</h2><p>Envie uma folha com vários adornos, veja as peças separadas e arraste a que quiser para o calendário.</p></div>
+          <div class="sprite-card" id="sprite-card">
+            <div class="sprite-card-title"><span aria-hidden="true">✂</span><div><strong>1. Envie seu sprite sheet</strong><small>Aqui cada adorno é recortado automaticamente, sem colocar a folha inteira no calendário.</small></div></div>
+            <label id="sprite-dropzone" class="upload-zone sprite-upload" for="sprite-file" tabindex="0" role="button" aria-label="Clique ou arraste um sprite sheet para separar os adornos">
+              <span class="upload-icon" aria-hidden="true">⇧</span><strong>Arraste a imagem para cá</strong>
+              <span>ou clique para escolher PNG, JPG ou WebP</span><span class="drop-hint-file">Fundo branco ou transparente • até 120 peças por folha</span>
+            </label>
+            <input id="sprite-file" type="file" accept="image/png,image/jpeg,image/webp" multiple hidden>
+            <div class="sprite-status-line" id="sprite-status" role="status" aria-live="polite">Aguardando imagem. Tudo é processado neste computador.</div>
+            <details class="sprite-options"><summary>Opções de recorte <span>⚙</span></summary>
+              <div class="control"><label for="sprite-mode">Como remover o fundo?</label><select id="sprite-mode"><option value="auto">Automático (recomendado)</option><option value="transparente">Já é PNG transparente</option><option value="branco">Apagar fundo branco</option><option value="cantos">Reconhecer fundo pelas bordas</option><option value="cor">Apagar cor personalizada</option></select></div>
+              <div id="sprite-color-row" class="color-setting" hidden><label for="sprite-color">Cor do fundo a apagar</label><input id="sprite-color" type="color" value="#ffffff"></div>
+              <div class="control"><div class="control-label"><label for="sprite-tolerance">Tolerância do recorte</label><output id="sprite-tolerance-value">45</output></div><input id="sprite-tolerance" type="range" min="12" max="110" step="1" value="45"></div>
+              <div class="control"><label for="sprite-minimum">Menor peça a detectar</label><select id="sprite-minimum"><option value="0.01">Peças pequenas</option><option value="0.025" selected>Equilibrado</option><option value="0.1">Peças maiores</option><option value="0.5">Apenas peças grandes</option></select></div>
+            </details>
+          </div>
+          <div class="sprite-library-heading"><div><h3>2. Escolha um adorno</h3><p id="sprite-count">Nenhuma peça recortada</p></div><button id="clear-sprites" class="btn tertiary small" type="button">Limpar</button></div>
+          <div class="sprite-gallery" id="sprite-gallery" aria-label="Adornos individuais prontos para arrastar"><p class="empty-library">As miniaturas individuais vão aparecer aqui após importar seu sprite sheet.</p></div>
+          <p class="library-hint"><strong>3. Arraste</strong> uma miniatura da biblioteca até o ponto exato na página à direita. Você também pode clicar nela para inserir e ajustar depois.</p>
+          <details class="secondary-upload"><summary>Adicionar uma imagem pronta sem recortar</summary>
+            <label class="upload-zone ornament-zone" for="ornament-file"><strong>Escolher imagem individual</strong><span>Para arquivos que já são um único adorno</span></label>
+            <input id="ornament-file" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+          </details>
+          <div class="element-properties">
+            <h3>Ajustar objeto inserido</h3>
+            <div class="control"><label for="element-select">Elemento selecionado</label><select id="element-select"></select></div>
+            <button id="remove-element" class="btn tertiary" type="button" hidden>Excluir imagem adicionada</button>
+            <div class="control"><div class="control-label"><label for="element-scale">Tamanho</label><output id="element-scale-value">100%</output></div><input id="element-scale" type="range" min="45" max="175" step="1" value="100"></div>
+            <div class="control"><div class="control-label"><label for="element-x">Posição horizontal</label><output id="element-x-value">500</output></div><input id="element-x" type="range" min="-100" max="1100" step="1"></div>
+            <div class="control"><div class="control-label"><label for="element-y">Posição vertical</label><output id="element-y-value">600</output></div><input id="element-y" type="range" min="-100" max="1514" step="1"></div>
+            <div class="button-stack"><button id="element-reset" class="btn secondary" type="button">Restaurar posição</button><button id="all-reset" class="btn tertiary" type="button">Restaurar todo o layout</button></div>
+          </div>
+        </section>
+
+        <section id="panel-exportar" class="panel">
+          <div class="panel-heading"><h2>Salvar e imprimir</h2><p>PNG em alta resolução ou PDF de página única com tamanho físico correto.</p></div>
+          <div class="control"><label for="paper-size">Papel</label><select id="paper-size"><option value="A4">A4 — 21 × 29,7 cm</option><option value="A3">A3 — 29,7 × 42 cm</option></select></div>
+          <div class="control"><label for="dpi">Qualidade de exportação</label><select id="dpi"><option value="300">300 DPI — qualidade para impressão</option><option value="150">150 DPI — arquivos menores / prova</option></select></div>
+          <div id="export-size" class="file-note">A4, 300 DPI: 2480 × 3508 pixels.</div>
+          <button id="download-png" class="btn primary" type="button">⇩ Exportar PNG</button>
+          <button id="download-pdf" class="btn primary alt" type="button">⇩ Exportar PDF</button>
+          <div class="panel-heading divider-top"><h3>Projeto editável</h3><p>Guarde o trabalho e retome outro dia, inclusive com a foto.</p></div>
+          <button id="save-project" class="btn secondary" type="button">Salvar projeto (.json)</button>
+          <label for="load-project" class="btn secondary load-label">Abrir projeto salvo (.json)</label><input id="load-project" type="file" accept=".json,application/json" hidden>
+          <div class="tip">Importante: o PDF é gerado no próprio computador e não precisa de internet. Confira as margens e a prova antes de enviar à gráfica.</div>
+        </section>
+      </div>
+      <footer class="sidebar-footer">Ateliê offline • Sem conta, sem envio de fotos para servidores</footer>
+    </aside>
+
+    <main class="workspace">
+      <div class="workspace-top"><div><div class="eyebrow">PRÉ-VISUALIZAÇÃO EM TEMPO REAL</div><h2>Seu calendário personalizado</h2><p>Tudo que você vê no pôster será exportado.</p></div><div class="workspace-top-actions"><button id="open-photo" type="button" class="toolbar-btn">+ Foto</button><button id="go-export" type="button" class="toolbar-btn strong">Exportar ↗</button></div></div>
+      <div class="work-meta"><span id="status" role="status">Pronto para editar</span><span><span class="dot"></span> 12 meses • português do Brasil</span></div>
+      <div class="canvas-stage" id="canvas-stage"><div class="poster-container" id="poster-container"><canvas id="poster" width="1000" height="1414" aria-label="Prévia editável do calendário anual. Arraste a fotografia e os elementos."></canvas><div class="canvas-drop-hint" id="canvas-drop-hint" aria-hidden="true">Solte aqui para posicionar o adorno</div></div></div>
+      <div class="workspace-bottom"><span>↔ Arraste a foto ou selecione outros elementos para movê-los.</span><span id="preview-info">A4 • 2027</span></div>
+    </main>
+  </div>
+  <div class="toast" id="toast" aria-live="polite"></div>
+</body>
+</html>
